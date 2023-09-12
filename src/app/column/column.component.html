@@ -1,0 +1,29 @@
+<!-- 2 columns in div-->
+
+
+
+
+<div class="container">
+    <div class="column1">
+        <!-- Content for the first column -->
+
+
+        <ul>
+            <li *ngFor="let c of columns">
+                <span (click)="chooseColumn(c.cid)">{{c.cid}}-{{c.title}}</span>
+
+            </li>
+        </ul>
+
+
+
+    </div>
+    <div class="column2">
+        <!-- Content for the second column -->
+        <ul>
+            <li *ngFor="let a of articles">
+                <a routerLink="/columns/{{a.columnId}}/articles/{{a.id}}">{{a.title}}</a>
+            </li>
+        </ul>
+    </div>
+</div>

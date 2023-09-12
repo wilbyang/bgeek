@@ -1,0 +1,22 @@
+
+/* Create a container for the columns */
+.container {
+    display: flex; /* Use flexbox to create columns */
+    width: 100%;
+}
+
+/* Define the styles for the first column (30%) */
+.column1 {
+    flex: 30%; /* Take up 30% of the container width */
+    background-color: #f2f2f2; /* Background color */
+    padding: 20px; /* Add some padding */
+    flex-direction: column;
+    
+}
+
+/* Define the styles for the second column (70%) */
+.column2 {
+    flex: 70%; /* Take up 70% of the container width */
+    background-color: #ccc; /* Background color */
+    padding: 20px; /* Add some padding */
+}

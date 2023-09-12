@@ -1,1 +1,32 @@
 /* You can add global styles to this file, and also import other style files */
+body,
+html {
+    margin: 0;
+    padding: 0;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+ul li {
+    margin-bottom: 6px;
+}
+
+a {
+    text-decoration: none;
+}
+img {
+    max-width: 100%;
+    height: auto;
+}
+video {
+    max-width: 100%;
+    height: auto;
+}
+p {
+    font-size: 1.2em;
+    line-height: 1.5em;
+}
