@@ -18,13 +18,13 @@ export class GeekService {
 
   //load columns with http request
   constructor(private http: HttpClient) {
-
-    this.http.get<Column[]>('http://localhost:8080/geek/columns2').subscribe(result => {
+    /*
+    this.http.get<Column[]>('http://localhost:8800/geekbang/columns2').subscribe(result => {
       // sort by cid
       // loop through columns and load articles
       let cids = new Set<number>();
       let voids = result.map(column => {
-        return this.http.get<Article[]>(`http://localhost:8080/geek/${column.cid}/articles`).pipe(
+        return this.http.get<Article[]>(`http://localhost:8800/geekbang/${column.cid}/articles`).pipe(
           catchError(error => {
               console.error(error);
               return of([]);
@@ -49,17 +49,17 @@ export class GeekService {
       });
 
 
-    }, error => console.error(error));
+    }, error => console.error(error));*/
   }
   fetchColumns() {
-    this.http.get<Column[]>('http://localhost:8080/geek/columns2').subscribe({
+    this.http.get<Column[]>('http://localhost:8800/geekbang/columns2').subscribe({
       next: result => {
         this.$columns.next(result.sort((a, b) => a.cid - b.cid));
       }, error: error => console.error(error)
     });
   }
   fetchColumn(cid: Number) {
-    this.http.get<Article[]>(`http://localhost:8080/geek/${cid}/articles`).subscribe({
+    this.http.get<Article[]>(`http://localhost:8800/geekbang/${cid}/articles`).subscribe({
       next: result => {
         this.$articles.next(result.sort((a, b) => a.id - b.id));
       }, error: error => console.error(error)

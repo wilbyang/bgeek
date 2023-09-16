@@ -6,17 +6,21 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { ArticleComponent } from './article/article.component';
 import { ColumnComponent } from './column/column.component';
+import { TweetComponent } from './tweet/tweet.component';
+import {ReactiveFormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
     AppComponent,
     ArticleComponent,
-    ColumnComponent
+    ColumnComponent,
+    TweetComponent
   ],
   imports: [
     HttpClientModule,
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

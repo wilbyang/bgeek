@@ -12,14 +12,14 @@ const imgReg = /src\="https:\/\/static001.geekbang.org\/resource\/image\/[a-z0-9
   styleUrls: ['./article.component.css']
 })
 export class ArticleComponent {
-  
-  
+
+
   @ViewChild('content', {static: false}) contentDiv: ElementRef<HTMLDivElement> | undefined;
   constructor(private httpClient: HttpClient, private route: ActivatedRoute) {}
   ngAfterViewInit() {
     let cid = this.route.snapshot.params['cid'];
     let aid = this.route.snapshot.params['aid'];
-    this.httpClient.get<Article>(`http://localhost:8080/geek/${cid}/articles/${aid}`).subscribe({
+    this.httpClient.get<Article>(`http://localhost:8800/geekbang/${cid}/articles/${aid}`).subscribe({
       next: result => {
         if (this.contentDiv) {
           let content = result?.content || '';
