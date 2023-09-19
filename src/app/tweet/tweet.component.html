@@ -2,7 +2,7 @@
   <header class="blue section"><input [formControl]="keyword"></header>
   <main class="coral section">
     <ul>
-      <li *ngFor="let item of tweets">{{item.content}}</li>
+      <li *ngFor="let item of tweets">{{item.content|linkify}}</li>
     </ul>
   </main>
   <footer class="purple section">Footer Content</footer>

@@ -18,7 +18,9 @@ export class GeekService {
 
   //load columns with http request
   constructor(private http: HttpClient) {
-    /*
+    //this.completeStatus();
+  }
+  completeStatus() {
     this.http.get<Column[]>('http://localhost:8800/geekbang/columns2').subscribe(result => {
       // sort by cid
       // loop through columns and load articles
@@ -39,7 +41,7 @@ export class GeekService {
         result.forEach(one => {
           one.forEach(article => {
             if (article.content.length < 6) {
-              console.log(`${article.content}`);
+              console.log(`${article.columnId}-${article.id}`);
               cids.add(article.columnId);
             }
           });
@@ -49,7 +51,7 @@ export class GeekService {
       });
 
 
-    }, error => console.error(error));*/
+    }, error => console.error(error));
   }
   fetchColumns() {
     this.http.get<Column[]>('http://localhost:8800/geekbang/columns2').subscribe({
@@ -60,6 +62,13 @@ export class GeekService {
   }
   fetchColumn(cid: Number) {
     this.http.get<Article[]>(`http://localhost:8800/geekbang/${cid}/articles`).subscribe({
+      next: result => {
+        this.$articles.next(result.sort((a, b) => a.id - b.id));
+      }, error: error => console.error(error)
+    });
+  }
+  fetchArticlesByTag(tag: string) {
+    this.http.get<Article[]>(`http://localhost:8800/geekbang/tags/${tag}`).subscribe({
       next: result => {
         this.$articles.next(result.sort((a, b) => a.id - b.id));
       }, error: error => console.error(error)

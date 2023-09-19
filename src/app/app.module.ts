@@ -8,13 +8,17 @@ import { ArticleComponent } from './article/article.component';
 import { ColumnComponent } from './column/column.component';
 import { TweetComponent } from './tweet/tweet.component';
 import {ReactiveFormsModule} from "@angular/forms";
+import { TagsComponent } from './tags/tags.component';
+import { LinkifyPipe } from './linkify.pipe';
 
 @NgModule({
   declarations: [
     AppComponent,
     ArticleComponent,
     ColumnComponent,
-    TweetComponent
+    TweetComponent,
+    TagsComponent,
+    LinkifyPipe
   ],
   imports: [
     HttpClientModule,
