@@ -1,9 +1,8 @@
 <div class="parent">
   <header class="blue section"><input [formControl]="keyword"></header>
   <main class="coral section">
-    <ul>
-      <li *ngFor="let item of tweets">{{item.content|linkify}}</li>
-    </ul>
+    <p *ngFor="let item of tweets" [innerHTML]="item.content|linkify"></p>
+
   </main>
   <footer class="purple section">Footer Content</footer>
 </div>
