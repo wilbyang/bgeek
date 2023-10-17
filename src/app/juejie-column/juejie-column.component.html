@@ -1,0 +1,25 @@
+<!-- 2 columns in div-->
+
+
+<div class="container">
+  <div class="column1">
+    <!-- Content for the first column -->
+    <ul>
+      <li *ngFor="let c of juejinColumns">
+        <span (click)="chooseColumn(c.id)">{{c.name}}</span>
+      </li>
+      <li></li><li></li>
+    </ul>
+
+
+  </div>
+  <div class="column2">
+    <!-- Content for the second column -->
+    <ul>
+      <li *ngFor="let a of juejinArticles" (click)="chooseJuejinArticle(a)">
+        {{a.title}}
+      </li>
+    </ul>
+  </div>
+
+</div>

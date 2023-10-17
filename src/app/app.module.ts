@@ -10,6 +10,8 @@ import { TweetComponent } from './tweet/tweet.component';
 import {ReactiveFormsModule} from "@angular/forms";
 import { TagsComponent } from './tags/tags.component';
 import { LinkifyPipe } from './linkify.pipe';
+import { JuejieColumnComponent } from './juejie-column/juejie-column.component';
+import { JuejieArticleComponent } from './juejie-article/juejie-article.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +20,9 @@ import { LinkifyPipe } from './linkify.pipe';
     ColumnComponent,
     TweetComponent,
     TagsComponent,
-    LinkifyPipe
+    LinkifyPipe,
+    JuejieColumnComponent,
+    JuejieArticleComponent
   ],
   imports: [
     HttpClientModule,

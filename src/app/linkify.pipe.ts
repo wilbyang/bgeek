@@ -6,7 +6,7 @@ const urlRegex = /(https?:\/\/[^\s]+)/g;
 export class LinkifyPipe implements PipeTransform {
 
   transform(value: string, ...args: unknown[]): string {
-    return value.replace(urlRegex, '<a href="$1">$1</a>');
+    return value.replace(urlRegex, '<a href="$1" target="_blank">$1</a>');
   }
 
 }

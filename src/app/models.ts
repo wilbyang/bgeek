@@ -12,3 +12,14 @@ export interface Article {
   summary: string;
   content: string;
 }
+
+export interface JuejinColumn {
+  name: string;
+  id: string;
+}
+export interface JuejinArticle {
+  index: number;
+  title: string;
+  html: string;
+  markdown: string;
+}
