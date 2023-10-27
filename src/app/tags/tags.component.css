@@ -1,0 +1,32 @@
+
+/* Create a container for the columns */
+.mycontainer {
+  display: flex; /* Use flexbox to create columns */
+  width: 100%;
+  flex-direction: row;
+}
+
+
+.column1 {
+  flex: 6; /* Take up 30% of the container width */
+  background-color: #f2f2f2; /* Background color */
+
+
+
+}
+.column1 ul {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  justify-items: start;
+  flex-wrap: wrap;
+  height: 1652px; /* set fixed height */
+  padding: 20px; /* Add some padding */
+}
+
+.column2 {
+  flex: 3; /* Take up 70% of the container width */
+  background-color: #ccc; /* Background color */
+  padding: 20px; /* Add some padding */
+
+}

@@ -1,15 +1,13 @@
 <!-- 2 columns in div-->
 
 
-<div class="container">
+<div class="mycontainer">
   <div class="column1">
     <!-- Content for the first column -->
     <ul>
       <li *ngFor="let c of columns">
         <span (click)="chooseColumn(c.cid)">{{c.title}}</span>
       </li>
-      <li></li><li></li>
-      <app-tags></app-tags>
     </ul>
 
 

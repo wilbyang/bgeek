@@ -1,6 +1,6 @@
 
 /* Create a container for the columns */
-.container {
+.mycontainer {
     display: flex; /* Use flexbox to create columns */
     width: 100%;
     flex-direction: row;
