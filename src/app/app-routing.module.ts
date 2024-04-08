@@ -13,6 +13,7 @@ const routes: Routes = [
   { path: 'columns', component: ColumnComponent },
   { path: 'columns/tags', component: TagsComponent },
   { path: 'columns/:cid/articles/:aid', component: ArticleComponent },
+  { path: 'columns/:cid', component: ColumnComponent },
   { path: 'juejin', component: JuejieColumnComponent },
   { path: 'juejin/article', component: JuejieArticleComponent },
   { path: 'tweets', component: TweetComponent },

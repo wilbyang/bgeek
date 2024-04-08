@@ -25,6 +25,7 @@ export class ArticleComponent {
           let content = result?.content || '';
           content = content.replace(imgReg, `src="http://geek_images.test/${result!.columnId}/$1"`);
           this.contentDiv.nativeElement.innerHTML = content;
+          (window as any).latex();
         }
       }, error: error => console.error(error)
     });
