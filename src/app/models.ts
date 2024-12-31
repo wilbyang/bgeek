@@ -23,3 +23,9 @@ export interface JuejinArticle {
   html: string;
   markdown: string;
 }
+
+export interface Bookmark {
+  id: number;
+  context: string;
+  content: string;
+}

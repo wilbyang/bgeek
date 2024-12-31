@@ -8,6 +8,7 @@ import {TweetComponent} from "./tweet/tweet.component";
 import {JuejieColumnComponent} from "./juejie-column/juejie-column.component";
 import {JuejieArticleComponent} from "./juejie-article/juejie-article.component";
 import {TagsComponent} from "./tags/tags.component";
+import {BookmarkComponent} from "./bookmark/bookmark.component";
 const routes: Routes = [
   { path: '', redirectTo: '/tweets', pathMatch: 'full' },
   { path: 'columns', component: ColumnComponent },
@@ -17,6 +18,7 @@ const routes: Routes = [
   { path: 'juejin', component: JuejieColumnComponent },
   { path: 'juejin/article', component: JuejieArticleComponent },
   { path: 'tweets', component: TweetComponent },
+  { path: 'bookmark', component: BookmarkComponent },
 ];
 
 @NgModule({

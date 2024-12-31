@@ -12,6 +12,7 @@ import { TagsComponent } from './tags/tags.component';
 import { LinkifyPipe } from './linkify.pipe';
 import { JuejieColumnComponent } from './juejie-column/juejie-column.component';
 import { JuejieArticleComponent } from './juejie-article/juejie-article.component';
+import { BookmarkComponent } from './bookmark/bookmark.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { JuejieArticleComponent } from './juejie-article/juejie-article.componen
     TagsComponent,
     LinkifyPipe,
     JuejieColumnComponent,
-    JuejieArticleComponent
+    JuejieArticleComponent,
+    BookmarkComponent
   ],
   imports: [
     HttpClientModule,
