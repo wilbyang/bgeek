@@ -21,6 +21,7 @@ import {
 export class BookmarkComponent implements OnInit {
   constructor(private http: HttpClient){}
   bookmarks: Bookmark[] = [];
+  lastBookmark: Bookmark | undefined;
   private isNearBottom(): boolean {
     const threshold = 100; // Pixels from bottom
     const position = window.innerHeight + window.scrollY;
@@ -35,8 +36,14 @@ export class BookmarkComponent implements OnInit {
   private getbookmarks(page: number) {
     return this.http.get<Bookmark[]>(`http://localhost:8800/bookmark/bookmarks?page=${page}`);
   }
+  private getLastBookmark() {
+    return this.http.get<Bookmark>(`http://localhost:8800/bookmark/bookmarks/last`);
+  }
   ngOnInit(): void {
-
+    this.getLastBookmark().subscribe(bookmark => {
+      this.lastBookmark = bookmark;
+      this.page = Math.floor(this.lastBookmark.id / 10);
+    });
 
     const scrollEvent$ = fromEvent(window, 'scroll');
 
@@ -50,7 +57,7 @@ export class BookmarkComponent implements OnInit {
         filter((isNearBottom) => isNearBottom && !this.loading$.value),
         tap(() => this.loading$.next(true)),
         switchMap(() =>
-          this.getbookmarks(++this.page)
+          this.getbookmarks(this.page--)
             .pipe(
               tap((bookmarks) => {
                 if (bookmarks.length === 0) this.noMoreData$.next();
@@ -61,7 +68,7 @@ export class BookmarkComponent implements OnInit {
         takeUntil(merge(this.destroy$, this.noMoreData$))
       )
       .subscribe((bookmarks) => {
-        bookmarks.sort((a, b) => b.id - a.id);
+        //bookmarks.sort((a, b) => b.id - a.id);
         this.bookmarks = [...this.bookmarks, ...bookmarks];
       });
   }
