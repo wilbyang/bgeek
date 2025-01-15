@@ -43,34 +43,35 @@ export class BookmarkComponent implements OnInit {
     this.getLastBookmark().subscribe(bookmark => {
       this.lastBookmark = bookmark;
       this.page = Math.floor(this.lastBookmark.id / 10);
+      const scrollEvent$ = fromEvent(window, 'scroll');
+
+      scrollEvent$
+        .pipe(
+          startWith(null),
+          auditTime(50), // Prevent excessive event triggering
+          observeOn(animationFrameScheduler),
+          map(() => this.isNearBottom()),
+          distinctUntilChanged(), // Emit only when near-bottom state changes
+          filter((isNearBottom) => isNearBottom && !this.loading$.value),
+          tap(() => this.loading$.next(true)),
+          switchMap(() =>
+            this.getbookmarks(this.page--)
+              .pipe(
+                tap((bookmarks) => {
+                  if (bookmarks.length === 0) this.noMoreData$.next();
+                }),
+                finalize(() => this.loading$.next(false))
+              )
+          ),
+          takeUntil(merge(this.destroy$, this.noMoreData$))
+        )
+        .subscribe((bookmarks) => {
+          bookmarks.sort((a, b) => b.id - a.id);
+          this.bookmarks = [...this.bookmarks, ...bookmarks];
+        });
     });
 
-    const scrollEvent$ = fromEvent(window, 'scroll');
 
-    scrollEvent$
-      .pipe(
-        startWith(null),
-        auditTime(50), // Prevent excessive event triggering
-        observeOn(animationFrameScheduler),
-        map(() => this.isNearBottom()),
-        distinctUntilChanged(), // Emit only when near-bottom state changes
-        filter((isNearBottom) => isNearBottom && !this.loading$.value),
-        tap(() => this.loading$.next(true)),
-        switchMap(() =>
-          this.getbookmarks(this.page--)
-            .pipe(
-              tap((bookmarks) => {
-                if (bookmarks.length === 0) this.noMoreData$.next();
-              }),
-              finalize(() => this.loading$.next(false))
-            )
-        ),
-        takeUntil(merge(this.destroy$, this.noMoreData$))
-      )
-      .subscribe((bookmarks) => {
-        //bookmarks.sort((a, b) => b.id - a.id);
-        this.bookmarks = [...this.bookmarks, ...bookmarks];
-      });
   }
   ngOnDestroy() {
     this.destroy$.next();
