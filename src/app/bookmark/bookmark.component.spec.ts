@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { BookmarkComponent } from './bookmark.component';
 
 describe('BookmarkComponent', () => {
@@ -8,6 +8,7 @@ describe('BookmarkComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule],
       declarations: [BookmarkComponent]
     });
     fixture = TestBed.createComponent(BookmarkComponent);

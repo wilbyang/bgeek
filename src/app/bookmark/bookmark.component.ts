@@ -1,17 +1,30 @@
 import {Component, OnInit} from '@angular/core';
-import {GeekService} from "../geek.service";
 import {HttpClient} from "@angular/common/http";
-import {Bookmark} from "../models";
+import {Bookmark, Tag} from "../models";
 import {
   animationFrameScheduler,
-  auditTime, BehaviorSubject,
+  auditTime,
+  BehaviorSubject,
+  catchError,
   distinctUntilChanged,
-  filter, finalize,
+  exhaustMap,
+  filter,
+  finalize,
+  from,
   fromEvent,
-  map, merge,
+  map,
+  merge,
+  mergeMap,
   observeOn,
-  startWith, Subject, switchMap, takeUntil, tap
+  of,
+  Subject,
+  startWith,
+  takeUntil,
+  tap,
+  Subscription,
+  forkJoin
 } from "rxjs";
+import {marked} from "marked";
 
 @Component({
   selector: 'app-bookmark',
@@ -19,75 +32,64 @@ import {
   styleUrls: ['./bookmark.component.css']
 })
 export class BookmarkComponent implements OnInit {
-  constructor(private http: HttpClient){}
+  constructor(private http: HttpClient) {}
+
+  // UI state
   bookmarks: Bookmark[] = [];
-  lastBookmark: Bookmark | undefined;
-  private isNearBottom(): boolean {
-    const threshold = 100; // Pixels from bottom
-    const position = window.innerHeight + window.scrollY;
-    const height = document.documentElement.scrollHeight;
+  tags: Tag[] = [];
+  selectedTag: Tag | null = null;
+  
+  
+  private getTags() {
+    return this.http.get<Tag[]>(`http://localhost:8800/bookmark/tags`);
+  }
+  private getAllBookmarkIds() {
+    return this.http.get<number[]>(`http://localhost:8800/bookmark/bookmarks/ids`).pipe(
+      catchError(() => of<number[]>([]))
+    );
+  }
 
-    return position > height - threshold;
-  }
-  public loading$ = new BehaviorSubject<boolean>(false);
-  public noMoreData$ = new Subject<void>();
-  private destroy$ = new Subject<void>();
-  private page = 0;
-  private getbookmarks(page: number) {
-    return this.http.get<Bookmark[]>(`http://localhost:8800/bookmark/bookmarks?page=${page}`);
-  }
-  private getLastBookmark() {
-    return this.http.get<Bookmark>(`http://localhost:8800/bookmark/bookmarks/last`);
-  }
   ngOnInit(): void {
-    this.getLastBookmark().subscribe(bookmark => {
-      this.lastBookmark = bookmark;
-      this.page = Math.floor(this.lastBookmark.id / 10);
-      const scrollEvent$ = fromEvent(window, 'scroll');
-
-      scrollEvent$
-        .pipe(
-          startWith(null),
-          auditTime(50), // Prevent excessive event triggering
-          observeOn(animationFrameScheduler),
-          map(() => this.isNearBottom()),
-          distinctUntilChanged(), // Emit only when near-bottom state changes
-          filter((isNearBottom) => isNearBottom && !this.loading$.value),
-          tap(() => this.loading$.next(true)),
-          switchMap(() =>
-            this.getbookmarks(this.page--)
-              .pipe(
-                tap((bookmarks) => {
-                  if (bookmarks.length === 0) this.noMoreData$.next();
-                }),
-                finalize(() => this.loading$.next(false))
-              )
-          ),
-          takeUntil(merge(this.destroy$, this.noMoreData$))
-        )
-        .subscribe((bookmarks) => {
-          bookmarks.sort((a, b) => b.id - a.id);
-          this.bookmarks = [...this.bookmarks, ...bookmarks];
-        });
+    // Load tags and global bookmark ids for 'All' concurrently
+    forkJoin({
+      tags: this.getTags().pipe(catchError(() => of<Tag[]>([]))),
+      allIds: this.getAllBookmarkIds()
+    }).subscribe(({ tags, allIds }) => {
+      const allTag: Tag = { id: -1, name: 'All', bookmarks: allIds };
+      const latestIds = allIds.slice(-10); // Last 10 bookmarks as 'Latest'
+      latestIds.sort((a, b) => b - a); // Sort descending by id
+      const lastestTag: Tag = { id: -2, name: 'Latest', bookmarks: latestIds };
+      this.tags = [allTag, lastestTag, ...tags];
+      this.selectTag(lastestTag);
     });
-
-
   }
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-  refreshAndScrollToTop() {
-    this.page = 1;
+
+  selectTag(tag: Tag) {
+    if (tag === this.selectedTag) return;
+    this.selectedTag = tag;
     this.bookmarks = [];
-    this.loading$.next(true);
-    this.noMoreData$.complete();
-    window.scrollTo(0, 0);
-    this.getbookmarks(this.page).subscribe((bookmarks) => {
-      this.loading$.next(false);
-      this.bookmarks = bookmarks;
+
+    //convert tag.bookmarks from array to set to remove duplicates
+    const uniqueBookmarks = Array.from(new Set(tag.bookmarks));
+
+    // load bookmark by id for all ids in tag.bookmarks
+    const bookmarkRequests = uniqueBookmarks.map(id => this.http.get<Bookmark>(`http://localhost:8800/bookmark/bookmarks/${id}`));
+    forkJoin(bookmarkRequests).subscribe({
+      next: bookmarks => {
+        // Render markdown to HTML for each bookmark content
+        this.bookmarks = bookmarks.map(b => {
+          const rendered = marked.parse(b.content as string);
+          // marked.parse might return string or Promise depending on config; normalize.
+          if (typeof rendered === 'string') {
+            return {...b, content: rendered};
+          } else {
+            // Fallback async resolution; optimistic empty placeholder first
+            rendered.then(html => b.content = html);
+            return b;
+          }
+        });
+      },
+      error: () => {}
     });
   }
-
-
 }

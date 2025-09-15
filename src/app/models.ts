@@ -29,3 +29,9 @@ export interface Bookmark {
   context: string;
   content: string;
 }
+
+export interface Tag {
+  id: number;
+  name: string;
+  bookmarks: number[];
+}

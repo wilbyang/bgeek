@@ -1,13 +1,18 @@
-<!--loop bookmarks-->
-<div class="container">
-  <div class="row">
-    <div class="col-md-12">
-      <div class="card-columns">
-        <div class="card" *ngFor="let bookmark of bookmarks">
-          <div class="card-body">
-            <h5 class="card-title"> {{ bookmark.context }}</h5>
-            {{ bookmark.content }}
-          </div>
+<div class="bookmark-wrapper">
+  <div class="tag-panel" *ngIf="tags.length > 0">
+    <h4>Tags</h4>
+    <ul class="tag-list">
+      <li *ngFor="let t of tags" (click)="selectTag(t)" [class.active]="t===selectedTag">{{t.name}}</li>
+    </ul>
+  </div>
+
+  <div class="bookmark-list" *ngIf="selectedTag">
+    <h5>Bookmarks for: {{selectedTag.name}} <span *ngIf="selectedTag.name==='All'">({{bookmarks.length}})</span></h5>
+    <div class="card-columns">
+      <div class="card" *ngFor="let bookmark of bookmarks">
+        <div class="card-body">
+          <h5 class="card-title"> {{ bookmark.context }} - {{ bookmark.id }}</h5>
+          <div [innerHTML]="bookmark.content"></div>
         </div>
       </div>
     </div>

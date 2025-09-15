@@ -1,0 +1,24 @@
+ .bookmark-wrapper {
+	 display: flex;
+	 gap: 2rem;
+ }
+ .tag-panel {
+	 min-width: 200px;
+ }
+ .tag-list {
+	 list-style: none;
+	 padding: 0;
+	 margin: 0;
+ }
+ .tag-list li {
+	 cursor: pointer;
+	 padding: 4px 8px;
+	 border-radius: 4px;
+	 margin-bottom: 4px;
+	 background: #f2f2f2;
+	 transition: background .15s;
+ }
+ .tag-list li:hover { background: #e2e2e2; }
+ .tag-list li.active { background: #007bff; color: #fff; }
+ .bookmark-list { flex: 1; }
+ .loading, .end { text-align: center; padding: 1rem; color: #666; }

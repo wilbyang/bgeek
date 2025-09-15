@@ -57,6 +57,32 @@
         elog.push(err);
       })
     }
+
+    window.taggingBookmark = (label, bid, elog) => {
+      var data = {
+        "name": label,
+        "bookmarks": [bid],
+      };
+      fetch("http://localhost:8800/bookmark/tags", {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json"
+        },
+        credentials: "same-origin"
+
+      }).then(res => {
+        if (res.ok) {
+          return res.json();
+        } else {
+          throw new Error("Something went wrong");
+        }
+      }).then(res => {
+        console.log(res);
+      }).catch(err => {
+        elog.push(err);
+      })
+    }
   </script>
 </head>
 <body>
